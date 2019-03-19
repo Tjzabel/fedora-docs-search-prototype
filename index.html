@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Fedora Docs Search Protoype</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <h1> Fedora Docs</h1>
+
+    <form id="searchForm">
+        Search:<br>
+        <input type="text" name="search">
+        <input type="submit" value="Search">
+    </form>
+
+    <div id="total"></div>
+    <br>
+    <div id="results"></div>
+
+    <script>
+
+        var form = document.getElementById("searchForm");
+
+
+        form.onsubmit = function (e) {
+            e.preventDefault();
+
+            var searchHost = 'http://localhost:9200/_search?pretty';
+
+            var searchPhrase = form[0].value;
+
+            var query = {
+                query: {
+                    match: {
+                        title: searchPhrase
+                    }
+                }
+            }
+
+            var query = {
+                query: {
+                    multi_match: {
+                        query: searchPhrase,
+                        fields: ["title.search^2", "body.search"]
+                    }
+                }
+            }
+
+
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.open('POST', searchHost, false);
+            xmlHttp.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+            xmlHttp.send(JSON.stringify(query));
+            var response = JSON.parse(xmlHttp.responseText);
+
+            var output = '';
+            for (var i = 0; i < response.hits.hits.length; i++) {
+                output += '<p><a href="">' + response.hits.hits[i]._source.title + '</a></p>';
+
+            }
+            document.getElementById('total').innerHTML = 'found ' + response.hits.hits.length + ' results';
+            document.getElementById('results').innerHTML = output;
+        };
+    </script>
+</body>
+
+</html>
