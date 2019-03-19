@@ -39,6 +39,11 @@
                         query: searchPhrase,
                         fields: ["title.search^2", "body.search"]
                     }
+                },
+                highlight: {
+                    fields: {
+                        "body.search": {}
+                    }
                 }
             }
 
@@ -52,7 +57,8 @@
             var output = '';
             for (var i = 0; i < response.hits.hits.length; i++) {
                 output += '<p><a href="">' + response.hits.hits[i]._source.title + '</a></p>';
-
+                output += response.hits.hits[i].highlight["body.search"][0];
+                output += '<br>'
             }
             document.getElementById('total').innerHTML = 'found ' + response.hits.hits.length + ' results';
             document.getElementById('results').innerHTML = output;

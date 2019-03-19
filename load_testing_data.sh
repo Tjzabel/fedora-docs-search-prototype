@@ -9,6 +9,7 @@ curl -H "Content-Type: application/json" -X PUT -d '
       "properties": { 
         "title": { 
             "type": "text",
+            "store": true,
             "fields": {
                 "search": {
                     "type": "text",
@@ -18,6 +19,7 @@ curl -H "Content-Type: application/json" -X PUT -d '
         }, 
         "body": { 
             "type": "text",
+            "store": true,ca
             "fields": {
                 "search": {
                     "type": "text",
@@ -40,7 +42,7 @@ curl -H "Content-Type: application/json" -X POST -d '
     "component": {
         "name": "Modularity"
     },
-    "body": "Multiple versions of packages in Fedora with the qualities expected from a Linux distribution: transparently built and delivered, actively maintained, and easy to install."
+    "body": "Multiple versions of packages in Fedora with the qualities expected from a Linux distribution: transparently built and delivered, actively maintained, and easy to install. Modularity introduces a new optional repository to Fedora called Modular (often referred to as the Application Stream or AppStream for short) that ships additional versions of software on independent life cycles. This enables users to keep their operating system up-to-date while having the right version of an application for their use case, even when the default version in the distribution changes."
 }
 ' http://localhost:9200/fedora-docs/page/1
 
