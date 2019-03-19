@@ -35,14 +35,6 @@
 
             var query = {
                 query: {
-                    match: {
-                        title: searchPhrase
-                    }
-                }
-            }
-
-            var query = {
-                query: {
                     multi_match: {
                         query: searchPhrase,
                         fields: ["title.search^2", "body.search"]
