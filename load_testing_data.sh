@@ -19,7 +19,7 @@ curl -H "Content-Type: application/json" -X PUT -d '
         }, 
         "body": { 
             "type": "text",
-            "store": true,ca
+            "store": true,
             "fields": {
                 "search": {
                     "type": "text",
