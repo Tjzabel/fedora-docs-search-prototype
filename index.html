@@ -4,27 +4,53 @@
 <head>
     <meta charset="utf-8">
     <title>Fedora Docs Search Protoype</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 </head>
 
 <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">
+            <img src="static/docs_logo.png" height="30" class="d-inline-block align-top" alt="">
+        </a>
+    </nav>
 
-    <h1> Fedora Docs</h1>
+    <div class="container">
+        <h1> Fedora Docs</h1>
 
-    <form id="searchForm">
-        Search:<br>
-        <input type="text" name="search">
-        <input type="submit" value="Search">
-    </form>
+        <form id="searchForm">
+            Search:<br>
+            <input type="text" name="search">
+            <input type="submit" value="Search">
+        </form>
 
-    <div id="total"></div>
-    <br>
-    <div id="results"></div>
+        <div id="total"></div>
+        <br>
+        <div id="results">
+           
+    </div>
+
+
+
 
     <script>
 
         var form = document.getElementById("searchForm");
 
+        function outputResults(response) {
+            var output = '';
+            for (var i = 0; i < response.hits.hits.length; i++) {
+                output += '<div class="card"><div class="card-body">';
+                output += '<h5 class="card-title"><a href="">' + response.hits.hits[i]._source.title + '</a></h5>';
+                output += '<h6 class="card-subtitle mb-2 text-muted">Docs / Modularity</h6>';
+                output += '<p class="card-text">'+response.hits.hits[i].highlight["body.search"][0]+'</p>';
+                output += '</div></div>';
+            }
+            return output;
+        }
 
         form.onsubmit = function (e) {
             e.preventDefault();
@@ -54,12 +80,7 @@
             xmlHttp.send(JSON.stringify(query));
             var response = JSON.parse(xmlHttp.responseText);
 
-            var output = '';
-            for (var i = 0; i < response.hits.hits.length; i++) {
-                output += '<p><a href="">' + response.hits.hits[i]._source.title + '</a></p>';
-                output += response.hits.hits[i].highlight["body.search"][0];
-                output += '<br>'
-            }
+            var output = outputResults(response);
             document.getElementById('total').innerHTML = 'found ' + response.hits.hits.length + ' results';
             document.getElementById('results').innerHTML = output;
         };
